@@ -33,6 +33,8 @@ npm run build
 The production site is hosted on Vercel. Pushes to `main` trigger production
 deployments, while other branches and pull requests receive preview deployments.
 
+[View the live portfolio](https://portfolio-site-beta-blush-81.vercel.app/)
+
 ## Related Case Study
 
 [AI-Driven Drug Discovery Pipeline — Data Engineering Optimization](https://github.com/DevSmapy/AI-Driven-Drug-Discovery-Pipeline-Data-Engineering-Optimization)
