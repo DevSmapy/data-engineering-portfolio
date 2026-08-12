@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CaseStudyPage } from "../../PortfolioPage";
-import { platform } from "../../content";
+import { getBundle } from "../../content";
 
 export const metadata: Metadata = {
   title: "AI Research Platform Engineering | DevSmapy",
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function PlatformCasePage() {
-  return <CaseStudyPage caseStudy={platform} />;
+  return <CaseStudyPage locale="en" caseStudy={getBundle("en").platform} />;
 }

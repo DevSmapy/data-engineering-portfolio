@@ -1,5 +1,14 @@
 import Link from "next/link";
-import { backbone, hub, platform, type CaseContent } from "./content";
+import {
+  BACKBONE_PATH,
+  PLATFORM_PATH,
+  getBundle,
+  languageHref,
+  languageLinks,
+  localizePath,
+  type CaseContent,
+  type Locale,
+} from "./content";
 
 function Lines({ text }: { text: string }) {
   return (
@@ -37,16 +46,36 @@ function NavHref({
   );
 }
 
+function LanguageSwitch({ locale, page }: { locale: Locale; page: "home" | "platform" | "backbone" }) {
+  return (
+    <div className="languageSwitch" aria-label="Language selector">
+      {languageLinks.map((item) => (
+        <NavHref
+          className={locale === item.locale ? "active" : ""}
+          href={languageHref(item.locale, page)}
+          key={item.code}
+        >
+          {item.code}
+        </NavHref>
+      ))}
+    </div>
+  );
+}
+
 function SiteNav({
-  brandHref = "/",
-  brandLabel = "DevSmapy / Portfolio",
+  brandHref,
+  brandLabel,
   links,
   githubUrl,
+  locale,
+  page,
 }: {
-  brandHref?: string;
-  brandLabel?: string;
+  brandHref: string;
+  brandLabel: string;
   links: { href: string; label: string }[];
   githubUrl?: string;
+  locale: Locale;
+  page: "home" | "platform" | "backbone";
 }) {
   return (
     <nav className="nav shell" aria-label="Primary navigation">
@@ -60,6 +89,7 @@ function SiteNav({
             {link.label}
           </NavHref>
         ))}
+        <LanguageSwitch locale={locale} page={page} />
         {githubUrl && (
           <a className="navCta" href={githubUrl} target="_blank" rel="noreferrer">
             GitHub ↗
@@ -70,14 +100,23 @@ function SiteNav({
   );
 }
 
-export function HubPage() {
+export function HubPage({ locale }: { locale: Locale }) {
+  const { hub, ui } = getBundle(locale);
+  const home = localizePath(locale, "/");
+  const platformHref = localizePath(locale, PLATFORM_PATH);
+  const backboneHref = localizePath(locale, BACKBONE_PATH);
+
   return (
     <main>
       <SiteNav
+        brandHref={home}
+        brandLabel={ui.brandPortfolio}
+        locale={locale}
+        page="home"
         links={[
-          { href: "#work", label: "Work" },
-          { href: hub.projects[0].href, label: "Platform" },
-          { href: hub.projects[1].href, label: "Backbone" },
+          { href: "#work", label: ui.work },
+          { href: platformHref, label: ui.platform },
+          { href: backboneHref, label: ui.backbone },
         ]}
       />
 
@@ -95,11 +134,11 @@ export function HubPage() {
             </h1>
             <p className="heroCopy">{hub.heroCopy}</p>
             <div className="heroActions">
-              <NavHref className="button primary" href={hub.projects[0].href}>
+              <NavHref className="button primary" href={platformHref}>
                 {hub.primaryCta}
                 <span>→</span>
               </NavHref>
-              <NavHref className="button secondary" href={hub.projects[1].href}>
+              <NavHref className="button secondary" href={backboneHref}>
                 {hub.secondaryCta}
                 <span>→</span>
               </NavHref>
@@ -116,38 +155,48 @@ export function HubPage() {
           </div>
         </div>
         <div className="workGrid">
-          {hub.projects.map((project, index) => (
-            <article className="workCard" key={project.href}>
-              <span className="capIndex">0{index + 1}</span>
-              <h3>{project.title}</h3>
-              <p>{project.summary}</p>
-              <dl>
-                {project.facts.map(([label, value]) => (
-                  <div key={label}>
-                    <dt>{label}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="workCardActions">
-                <NavHref className="button primary" href={project.href}>
-                  Open case
-                  <span>→</span>
-                </NavHref>
-                <a className="button secondary" href={project.githubUrl} target="_blank" rel="noreferrer">
-                  GitHub
-                  <span>↗</span>
-                </a>
-              </div>
-            </article>
-          ))}
+          {hub.projects.map((project, index) => {
+            const href = localizePath(locale, project.href);
+            return (
+              <article className="workCard" key={project.href}>
+                <span className="capIndex">0{index + 1}</span>
+                <h3>{project.title}</h3>
+                <p>{project.summary}</p>
+                <dl>
+                  {project.facts.map(([label, value]) => (
+                    <div key={label}>
+                      <dt>{label}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <div className="workCardActions">
+                  <NavHref className="button primary" href={href}>
+                    {hub.openCase}
+                    <span>→</span>
+                  </NavHref>
+                  <a className="button secondary" href={project.githubUrl} target="_blank" rel="noreferrer">
+                    {hub.githubLabel}
+                    <span>↗</span>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
       <footer>
         <div className="shell footerBottom hubFooter">
           <span>{hub.copyright}</span>
-          <span>English first · Korean & Japanese coming later</span>
+          <span>
+            {languageLinks.map((item, index) => (
+              <span key={item.code}>
+                {index > 0 && " · "}
+                <NavHref href={languageHref(item.locale, "home")}>{item.code}</NavHref>
+              </span>
+            ))}
+          </span>
           <span>© 2026 DevSmapy</span>
         </div>
       </footer>
@@ -155,17 +204,28 @@ export function HubPage() {
   );
 }
 
-export function CaseStudyPage({ caseStudy }: { caseStudy: CaseContent }) {
+export function CaseStudyPage({
+  locale,
+  caseStudy,
+}: {
+  locale: Locale;
+  caseStudy: CaseContent;
+}) {
+  const { ui } = getBundle(locale);
   const c = caseStudy;
   const hasSystem = Boolean(c.systemLabel && c.capabilities);
+  const home = localizePath(locale, "/");
+  const page = c.id === "platform" ? "platform" : "backbone";
 
   return (
     <main>
       <SiteNav
-        brandHref="/"
-        brandLabel="DevSmapy / Case Study"
+        brandHref={home}
+        brandLabel={ui.brandCase}
+        locale={locale}
+        page={page}
         links={[
-          { href: "/", label: "Home" },
+          { href: home, label: ui.home },
           { href: "#problem", label: c.nav[0] },
           { href: hasSystem ? "#system" : "#work", label: c.nav[1] },
           { href: "#stack", label: c.nav[c.nav.length - 1] },
@@ -392,8 +452,8 @@ export function CaseStudyPage({ caseStudy }: { caseStudy: CaseContent }) {
                 <span>↗</span>
               </a>
             )}
-            <NavHref className="button ghost" href="/">
-              Back to home
+            <NavHref className="button ghost" href={home}>
+              {ui.backHome}
               <span>←</span>
             </NavHref>
           </div>
@@ -401,11 +461,11 @@ export function CaseStudyPage({ caseStudy }: { caseStudy: CaseContent }) {
         <div className="shell footerBottom">
           <span>{c.copyright}</span>
           <span>
-            <NavHref href="/">Home</NavHref>
+            <NavHref href={home}>{ui.home}</NavHref>
             {" · "}
-            <NavHref href={platform.path}>Platform</NavHref>
+            <NavHref href={localizePath(locale, PLATFORM_PATH)}>{ui.platform}</NavHref>
             {" · "}
-            <NavHref href={backbone.path}>Backbone</NavHref>
+            <NavHref href={localizePath(locale, BACKBONE_PATH)}>{ui.backbone}</NavHref>
           </span>
           <span>© 2026 DevSmapy</span>
         </div>
