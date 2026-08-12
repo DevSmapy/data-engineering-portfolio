@@ -20,6 +20,12 @@ export {
   PLATFORM_VIDEO,
 } from "./shared";
 
+export function localeFromPathname(pathname: string): Locale {
+  if (pathname === "/ko" || pathname.startsWith("/ko/")) return "ko";
+  if (pathname === "/ja" || pathname.startsWith("/ja/")) return "ja";
+  return "en";
+}
+
 export function localizePath(locale: Locale, path: string): string {
   if (path === "/") return locale === "en" ? "/" : `/${locale}`;
   return locale === "en" ? path : `/${locale}${path}`;

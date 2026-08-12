@@ -8,7 +8,7 @@
   --mint: #a9f1d2;
   --mint-deep: #42d9a0;
   --line: #cfd6d4;
-  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-sans: "Pretendard", -apple-system, blinkmacsystemfont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
 
 * { box-sizing: border-box; }

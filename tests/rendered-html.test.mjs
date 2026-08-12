@@ -1,54 +1,147 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { spawn } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
-const root = new URL("../", import.meta.url);
+const root = fileURLToPath(new URL("../", import.meta.url));
+const PORT = 3467;
+const BASE = `http://127.0.0.1:${PORT}`;
 
-async function source(path) {
-  return readFile(new URL(path, root), "utf8");
+/** @type {import("node:child_process").ChildProcess | undefined} */
+let server;
+
+async function waitForServer() {
+  const deadline = Date.now() + 60_000;
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(BASE);
+      if (response.ok) return;
+    } catch {
+      // Server still starting.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  throw new Error("next start did not become ready in time");
 }
 
-test("defines hub and case routes for English, Korean, and Japanese", async () => {
-  const files = await Promise.all([
-    source("app/page.tsx"),
-    source("app/ko/page.tsx"),
-    source("app/ja/page.tsx"),
-    source("app/work/ai-research-platform/page.tsx"),
-    source("app/work/backbone-infrastructure/page.tsx"),
-    source("app/ko/work/ai-research-platform/page.tsx"),
-    source("app/ko/work/backbone-infrastructure/page.tsx"),
-    source("app/ja/work/ai-research-platform/page.tsx"),
-    source("app/ja/work/backbone-infrastructure/page.tsx"),
-  ]);
-
-  assert.match(files[0], /locale="en"/);
-  assert.match(files[1], /locale="ko"/);
-  assert.match(files[2], /locale="ja"/);
-  assert.match(files[3], /getBundle\("en"\)\.platform/);
-  assert.match(files[4], /getBundle\("en"\)\.backbone/);
-  assert.match(files[5], /getBundle\("ko"\)\.platform/);
-  assert.match(files[6], /getBundle\("ko"\)\.backbone/);
-  assert.match(files[7], /getBundle\("ja"\)\.platform/);
-  assert.match(files[8], /getBundle\("ja"\)\.backbone/);
+test.before(async () => {
+  server = spawn("node", ["node_modules/next/dist/bin/next", "start", "-p", String(PORT)], {
+    cwd: root,
+    stdio: ["ignore", "pipe", "pipe"],
+    env: { ...process.env, NODE_ENV: "production" },
+  });
+  await waitForServer();
 });
 
-test("keeps localized bundles and path helpers", async () => {
-  const [content, en, ko, ja, page] = await Promise.all([
-    source("app/content.ts"),
-    source("app/locales/en.ts"),
-    source("app/locales/ko.ts"),
-    source("app/locales/ja.ts"),
-    source("app/PortfolioPage.tsx"),
-  ]);
+test.after(() => {
+  server?.kill("SIGTERM");
+});
 
-  assert.match(content, /export function localizePath/);
-  assert.match(content, /export function languageHref/);
-  assert.match(en, /CASE STUDY \/ 2019–2022/);
-  assert.match(ko, /프로젝트 사례 \/ 2019–2022/);
-  assert.match(ja, /ケーススタディ \/ 2019–2022/);
-  assert.match(en, /export const en:/);
-  assert.match(ko, /export const ko:/);
-  assert.match(ja, /export const ja:/);
-  assert.match(page, /LanguageSwitch/);
-  assert.match(page, /languageHref/);
+async function fetchHtml(path) {
+  const response = await fetch(`${BASE}${path}`);
+  assert.equal(response.status, 200, path);
+  return response.text();
+}
+
+function assertLang(html, lang) {
+  assert.match(html, new RegExp(`<html[^>]*lang="${lang}"`));
+}
+
+function assertTitle(html, title) {
+  assert.match(html, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</title>`));
+}
+
+function assertLanguageLinks(html, hrefs) {
+  for (const href of hrefs) {
+    assert.match(html, new RegExp(`href="${href.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+  }
+}
+
+test("renders localized hub routes with document language, metadata, and language links", async () => {
+  const cases = [
+    {
+      path: "/",
+      lang: "en",
+      title: "Data Engineering Portfolio | DevSmapy",
+      text: "computational drug discovery.",
+      links: ["/", "/ko", "/ja"],
+    },
+    {
+      path: "/ko",
+      lang: "ko",
+      title: "데이터 엔지니어링 포트폴리오 | DevSmapy",
+      text: "AI 신약 개발을 위한",
+      links: ["/", "/ko", "/ja"],
+    },
+    {
+      path: "/ja",
+      lang: "ja",
+      title: "データエンジニアリング・ポートフォリオ | DevSmapy",
+      text: "計算創薬のための",
+      links: ["/", "/ko", "/ja"],
+    },
+  ];
+
+  for (const item of cases) {
+    const html = await fetchHtml(item.path);
+    assertLang(html, item.lang);
+    assertTitle(html, item.title);
+    assert.ok(html.includes(item.text), item.path);
+    assertLanguageLinks(html, item.links);
+  }
+});
+
+test("renders localized case routes with document language, metadata, and language links", async () => {
+  const cases = [
+    {
+      path: "/work/ai-research-platform",
+      lang: "en",
+      title: "AI Research Platform Engineering | DevSmapy",
+      text: "CASE STUDY / 2022–2023",
+      links: ["/work/ai-research-platform", "/ko/work/ai-research-platform", "/ja/work/ai-research-platform"],
+    },
+    {
+      path: "/work/backbone-infrastructure",
+      lang: "en",
+      title: "Large-Scale Chemical Data Operations | DevSmapy",
+      text: "CASE STUDY / 2019–2022",
+      links: ["/work/backbone-infrastructure", "/ko/work/backbone-infrastructure", "/ja/work/backbone-infrastructure"],
+    },
+    {
+      path: "/ko/work/ai-research-platform",
+      lang: "ko",
+      title: "AI 신약 연구 플랫폼 엔지니어링 | DevSmapy",
+      text: "프로젝트 사례 / 2022–2023",
+      links: ["/work/ai-research-platform", "/ko/work/ai-research-platform", "/ja/work/ai-research-platform"],
+    },
+    {
+      path: "/ko/work/backbone-infrastructure",
+      lang: "ko",
+      title: "대규모 화합물 데이터 운영 | DevSmapy",
+      text: "프로젝트 사례 / 2019–2022",
+      links: ["/work/backbone-infrastructure", "/ko/work/backbone-infrastructure", "/ja/work/backbone-infrastructure"],
+    },
+    {
+      path: "/ja/work/ai-research-platform",
+      lang: "ja",
+      title: "AI創薬研究プラットフォーム・エンジニアリング | DevSmapy",
+      text: "ケーススタディ / 2022–2023",
+      links: ["/work/ai-research-platform", "/ko/work/ai-research-platform", "/ja/work/ai-research-platform"],
+    },
+    {
+      path: "/ja/work/backbone-infrastructure",
+      lang: "ja",
+      title: "大規模化合物データ運用 | DevSmapy",
+      text: "ケーススタディ / 2019–2022",
+      links: ["/work/backbone-infrastructure", "/ko/work/backbone-infrastructure", "/ja/work/backbone-infrastructure"],
+    },
+  ];
+
+  for (const item of cases) {
+    const html = await fetchHtml(item.path);
+    assertLang(html, item.lang);
+    assertTitle(html, item.title);
+    assert.ok(html.includes(item.text), item.path);
+    assertLanguageLinks(html, item.links);
+  }
 });
