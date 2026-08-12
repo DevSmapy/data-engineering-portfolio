@@ -1,15 +1,24 @@
 # Data Engineering Portfolio
 
 Portfolio website for Yongkyun Lee's data engineering work in computational
-drug discovery. English is shipped first; Korean and Japanese follow after the
-English content is stable.
+drug discovery. Available in English, Korean, and Japanese.
 
 ## Routes
 
+### English
 - `/` — hub (Platform featured first, then Backbone)
 - `/work/ai-research-platform` — AI research platform case study
 - `/work/backbone-infrastructure` — high-throughput Backbone infrastructure case study
-- `/ko`, `/ja` — temporary redirects to `/` until localization returns
+
+### Korean
+- `/ko`
+- `/ko/work/ai-research-platform`
+- `/ko/work/backbone-infrastructure`
+
+### Japanese
+- `/ja`
+- `/ja/work/ai-research-platform`
+- `/ja/work/backbone-infrastructure`
 
 ## Prerequisites
 
@@ -28,7 +37,7 @@ npm run build
 - `npm run dev`: start the local development server
 - `npm run build`: create a production build
 - `npm run lint`: run static checks
-- `npm test`: build and verify hub + case routes
+- `npm test`: build and verify hub + case routes across locales
 
 ## Deployment
 

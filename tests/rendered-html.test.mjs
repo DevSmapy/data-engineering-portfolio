@@ -8,42 +8,47 @@ async function source(path) {
   return readFile(new URL(path, root), "utf8");
 }
 
-test("defines the English hub and two case study routes", async () => {
-  const [home, platform, backbone] = await Promise.all([
+test("defines hub and case routes for English, Korean, and Japanese", async () => {
+  const files = await Promise.all([
     source("app/page.tsx"),
+    source("app/ko/page.tsx"),
+    source("app/ja/page.tsx"),
     source("app/work/ai-research-platform/page.tsx"),
     source("app/work/backbone-infrastructure/page.tsx"),
+    source("app/ko/work/ai-research-platform/page.tsx"),
+    source("app/ko/work/backbone-infrastructure/page.tsx"),
+    source("app/ja/work/ai-research-platform/page.tsx"),
+    source("app/ja/work/backbone-infrastructure/page.tsx"),
   ]);
 
-  assert.match(home, /<HubPage\s*\/>/);
-  assert.match(platform, /caseStudy=\{platform\}/);
-  assert.match(backbone, /caseStudy=\{backbone\}/);
+  assert.match(files[0], /locale="en"/);
+  assert.match(files[1], /locale="ko"/);
+  assert.match(files[2], /locale="ja"/);
+  assert.match(files[3], /getBundle\("en"\)\.platform/);
+  assert.match(files[4], /getBundle\("en"\)\.backbone/);
+  assert.match(files[5], /getBundle\("ko"\)\.platform/);
+  assert.match(files[6], /getBundle\("ko"\)\.backbone/);
+  assert.match(files[7], /getBundle\("ja"\)\.platform/);
+  assert.match(files[8], /getBundle\("ja"\)\.backbone/);
 });
 
-test("keeps English hub and case content in the shared content module", async () => {
-  const [content, page] = await Promise.all([
+test("keeps localized bundles and path helpers", async () => {
+  const [content, en, ko, ja, page] = await Promise.all([
     source("app/content.ts"),
+    source("app/locales/en.ts"),
+    source("app/locales/ko.ts"),
+    source("app/locales/ja.ts"),
     source("app/PortfolioPage.tsx"),
   ]);
 
-  assert.match(content, /export const hub:/);
-  assert.match(content, /export const platform:/);
-  assert.match(content, /export const backbone:/);
-  assert.match(content, /href: "\/work\/ai-research-platform"/);
-  assert.match(content, /href: "\/work\/backbone-infrastructure"/);
-  assert.match(content, /100M\+/);
-  assert.match(content, /Scope Boundaries|SCOPE BOUNDARIES|What I did not own/i);
-  assert.match(page, /export function HubPage/);
-  assert.match(page, /export function CaseStudyPage/);
-  assert.match(page, /id="stack"/);
-});
-
-test("defers Korean and Japanese to redirects until Phase 3", async () => {
-  const [korean, japanese] = await Promise.all([
-    source("app/ko/page.tsx"),
-    source("app/ja/page.tsx"),
-  ]);
-
-  assert.match(korean, /redirect\("\/"\)/);
-  assert.match(japanese, /redirect\("\/"\)/);
+  assert.match(content, /export function localizePath/);
+  assert.match(content, /export function languageHref/);
+  assert.match(en, /CASE STUDY \/ 2019–2022/);
+  assert.match(ko, /프로젝트 사례 \/ 2019–2022/);
+  assert.match(ja, /ケーススタディ \/ 2019–2022/);
+  assert.match(en, /export const en:/);
+  assert.match(ko, /export const ko:/);
+  assert.match(ja, /export const ja:/);
+  assert.match(page, /LanguageSwitch/);
+  assert.match(page, /languageHref/);
 });
