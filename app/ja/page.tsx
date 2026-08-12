@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { PortfolioPage } from "../PortfolioPage";
+import { HubPage } from "../PortfolioPage";
 
 export const metadata: Metadata = {
-  title: "AI創薬研究プラットフォーム・エンジニアリング | DevSmapy",
-  description: "データエンジニアリング、ワークフロー自動化、再利用可能な科学研究基盤に関するプロジェクト事例です。",
+  title: "データエンジニアリング・ポートフォリオ | DevSmapy",
+  description:
+    "計算創薬における研究プラットフォーム設計と大規模分子データ運用のケーススタディをまとめたポートフォリオです。",
 };
 
-export default function JapanesePage() {
-  return <PortfolioPage locale="ja" />;
+export default function JapaneseHome() {
+  return <HubPage locale="ja" />;
 }
