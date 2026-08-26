@@ -20,7 +20,7 @@ export const ko: LocaleBundle = {
   hub: {
     heroEyebrow: "제약 R&D · 데이터 & AI 엔지니어링",
     heroTitle: "AI 신약 개발을 위한",
-    heroAccent: "데이터 엔지니어링.",
+    heroAccent: "데이터 엔지니어링",
     heroCopy:
       "연구 플랫폼 아키텍처와 대규모 분자 데이터 운영에 대한 사례입니다. 제가 담당한 일을 중심으로 정리했습니다.",
     primaryCta: "플랫폼 사례 보기",
