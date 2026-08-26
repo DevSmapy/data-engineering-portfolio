@@ -128,8 +128,7 @@ export function HubPage({ locale }: { locale: Locale }) {
         <div className="heroGrid hubHeroGrid">
           <div>
             <h1>
-              {hub.heroTitle}
-              <br />
+              <span className="heroLine">{hub.heroTitle}</span>
               <em>{hub.heroAccent}</em>
             </h1>
             <p className="heroCopy">{hub.heroCopy}</p>
