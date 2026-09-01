@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   BACKBONE_PATH,
   PLATFORM_PATH,
+  QSEED_PATH,
   getBundle,
   languageHref,
   languageLinks,
@@ -9,6 +10,16 @@ import {
   type CaseContent,
   type Locale,
 } from "./content";
+
+type NavPage = "home" | "platform" | "backbone" | "qseed";
+
+type HubProject = {
+  href: string;
+  githubUrl: string;
+  title: string;
+  summary: string;
+  facts: [string, string][];
+};
 
 function Lines({ text }: { text: string }) {
   return (
@@ -46,7 +57,7 @@ function NavHref({
   );
 }
 
-function LanguageSwitch({ locale, page }: { locale: Locale; page: "home" | "platform" | "backbone" }) {
+function LanguageSwitch({ locale, page }: { locale: Locale; page: NavPage }) {
   return (
     <div className="languageSwitch" aria-label="Language selector">
       {languageLinks.map((item) => (
@@ -75,7 +86,7 @@ function SiteNav({
   links: { href: string; label: string }[];
   githubUrl?: string;
   locale: Locale;
-  page: "home" | "platform" | "backbone";
+  page: NavPage;
 }) {
   return (
     <nav className="nav shell" aria-label="Primary navigation">
@@ -100,6 +111,53 @@ function SiteNav({
   );
 }
 
+function ProjectCards({
+  locale,
+  projects,
+  openCase,
+  githubLabel,
+  single,
+}: {
+  locale: Locale;
+  projects: HubProject[];
+  openCase: string;
+  githubLabel: string;
+  single?: boolean;
+}) {
+  return (
+    <div className={single ? "workGrid workGridSingle" : "workGrid"}>
+      {projects.map((project, index) => {
+        const href = localizePath(locale, project.href);
+        return (
+          <article className={single ? "workCard workCardSingle" : "workCard"} key={project.href}>
+            <span className="capIndex">0{index + 1}</span>
+            <h3>{project.title}</h3>
+            <p>{project.summary}</p>
+            <dl>
+              {project.facts.map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="workCardActions">
+              <NavHref className="button primary" href={href}>
+                {openCase}
+                <span>→</span>
+              </NavHref>
+              <a className="button secondary" href={project.githubUrl} target="_blank" rel="noreferrer">
+                {githubLabel}
+                <span>↗</span>
+              </a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
 export function HubPage({ locale }: { locale: Locale }) {
   const { hub, ui } = getBundle(locale);
   const home = localizePath(locale, "/");
@@ -115,6 +173,7 @@ export function HubPage({ locale }: { locale: Locale }) {
         page="home"
         links={[
           { href: "#work", label: ui.work },
+          { href: "#project", label: ui.project },
           { href: platformHref, label: ui.platform },
           { href: backboneHref, label: ui.backbone },
         ]}
@@ -153,36 +212,28 @@ export function HubPage({ locale }: { locale: Locale }) {
             <h2>{hub.workTitle}</h2>
           </div>
         </div>
-        <div className="workGrid">
-          {hub.projects.map((project, index) => {
-            const href = localizePath(locale, project.href);
-            return (
-              <article className="workCard" key={project.href}>
-                <span className="capIndex">0{index + 1}</span>
-                <h3>{project.title}</h3>
-                <p>{project.summary}</p>
-                <dl>
-                  {project.facts.map(([label, value]) => (
-                    <div key={label}>
-                      <dt>{label}</dt>
-                      <dd>{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <div className="workCardActions">
-                  <NavHref className="button primary" href={href}>
-                    {hub.openCase}
-                    <span>→</span>
-                  </NavHref>
-                  <a className="button secondary" href={project.githubUrl} target="_blank" rel="noreferrer">
-                    {hub.githubLabel}
-                    <span>↗</span>
-                  </a>
-                </div>
-              </article>
-            );
-          })}
+        <ProjectCards
+          locale={locale}
+          projects={hub.projects}
+          openCase={hub.openCase}
+          githubLabel={hub.githubLabel}
+        />
+      </section>
+
+      <section className="section shell" id="project">
+        <div className="sectionHeader">
+          <div>
+            <span className="sectionNo">{hub.personalLabel}</span>
+            <h2>{hub.personalTitle}</h2>
+          </div>
         </div>
+        <ProjectCards
+          locale={locale}
+          projects={hub.personalProjects}
+          openCase={hub.openCase}
+          githubLabel={hub.githubLabel}
+          single
+        />
       </section>
 
       <footer>
@@ -214,7 +265,7 @@ export function CaseStudyPage({
   const c = caseStudy;
   const hasSystem = Boolean(c.systemLabel && c.capabilities);
   const home = localizePath(locale, "/");
-  const page = c.id === "platform" ? "platform" : "backbone";
+  const page = c.id;
 
   return (
     <main>
@@ -461,10 +512,19 @@ export function CaseStudyPage({
           <span>{c.copyright}</span>
           <span>
             <NavHref href={home}>{ui.home}</NavHref>
-            {" · "}
-            <NavHref href={localizePath(locale, PLATFORM_PATH)}>{ui.platform}</NavHref>
-            {" · "}
-            <NavHref href={localizePath(locale, BACKBONE_PATH)}>{ui.backbone}</NavHref>
+            {c.id === "qseed" ? (
+              <>
+                {" · "}
+                <NavHref href={localizePath(locale, QSEED_PATH)}>{ui.qseed}</NavHref>
+              </>
+            ) : (
+              <>
+                {" · "}
+                <NavHref href={localizePath(locale, PLATFORM_PATH)}>{ui.platform}</NavHref>
+                {" · "}
+                <NavHref href={localizePath(locale, BACKBONE_PATH)}>{ui.backbone}</NavHref>
+              </>
+            )}
           </span>
           <span>© 2026 DevSmapy</span>
         </div>
