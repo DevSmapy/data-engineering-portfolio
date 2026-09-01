@@ -6,19 +6,22 @@ drug discovery. Available in English, Korean, and Japanese.
 ## Routes
 
 ### English
-- `/` — hub (Platform featured first, then Backbone)
+- `/` — hub (Platform featured first, then Backbone; personal project below)
 - `/work/ai-research-platform` — AI research platform case study
 - `/work/backbone-infrastructure` — high-throughput Backbone infrastructure case study
+- `/project/q-seed` — Q-SEED personal quant research engine
 
 ### Korean
 - `/ko`
 - `/ko/work/ai-research-platform`
 - `/ko/work/backbone-infrastructure`
+- `/ko/project/q-seed`
 
 ### Japanese
 - `/ja`
 - `/ja/work/ai-research-platform`
 - `/ja/work/backbone-infrastructure`
+- `/ja/project/q-seed`
 
 ## Prerequisites
 
@@ -50,3 +53,4 @@ deployments, while other branches and pull requests receive preview deployments.
 
 - [AI Research Platform](https://github.com/DevSmapy/AI-Driven-Drug-Discovery-Pipeline-Data-Engineering-Optimization)
 - [High-Throughput Backbone Infrastructure](https://github.com/DevSmapy/High-Throughput-Computational-Drug-Discovery-Infrastructure)
+- [Q-SEED](https://github.com/DevSmapy/Q-SEED)

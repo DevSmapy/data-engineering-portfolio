@@ -64,6 +64,7 @@ test("renders localized hub routes with document language, metadata, and languag
       lang: "en",
       title: "Data Engineering Portfolio | DevSmapy",
       text: "computational drug discovery.",
+      personalText: "One research engine.",
       links: ["/", "/ko", "/ja"],
     },
     {
@@ -71,6 +72,7 @@ test("renders localized hub routes with document language, metadata, and languag
       lang: "ko",
       title: "데이터 엔지니어링 포트폴리오 | DevSmapy",
       text: "AI 신약 개발을 위한",
+      personalText: "하나의 연구 엔진.",
       links: ["/", "/ko", "/ja"],
     },
     {
@@ -78,6 +80,7 @@ test("renders localized hub routes with document language, metadata, and languag
       lang: "ja",
       title: "データエンジニアリング・ポートフォリオ | DevSmapy",
       text: "計算創薬のための",
+      personalText: "ひとつの研究エンジン。",
       links: ["/", "/ko", "/ja"],
     },
   ];
@@ -87,6 +90,7 @@ test("renders localized hub routes with document language, metadata, and languag
     assertLang(html, item.lang);
     assertTitle(html, item.title);
     assert.ok(html.includes(item.text), item.path);
+    assert.ok(html.includes(item.personalText), item.path);
     assertLanguageLinks(html, item.links);
   }
 });
@@ -134,6 +138,40 @@ test("renders localized case routes with document language, metadata, and langua
       title: "大規模化合物データ運用 | DevSmapy",
       text: "ケーススタディ / 2019–2022",
       links: ["/work/backbone-infrastructure", "/ko/work/backbone-infrastructure", "/ja/work/backbone-infrastructure"],
+    },
+  ];
+
+  for (const item of cases) {
+    const html = await fetchHtml(item.path);
+    assertLang(html, item.lang);
+    assertTitle(html, item.title);
+    assert.ok(html.includes(item.text), item.path);
+    assertLanguageLinks(html, item.links);
+  }
+});
+
+test("renders localized project routes with document language, metadata, and language links", async () => {
+  const cases = [
+    {
+      path: "/project/q-seed",
+      lang: "en",
+      title: "Q-SEED | DevSmapy",
+      text: "IN PROGRESS",
+      links: ["/project/q-seed", "/ko/project/q-seed", "/ja/project/q-seed"],
+    },
+    {
+      path: "/ko/project/q-seed",
+      lang: "ko",
+      title: "Q-SEED | DevSmapy",
+      text: "진행 중",
+      links: ["/project/q-seed", "/ko/project/q-seed", "/ja/project/q-seed"],
+    },
+    {
+      path: "/ja/project/q-seed",
+      lang: "ja",
+      title: "Q-SEED | DevSmapy",
+      text: "進行中",
+      links: ["/project/q-seed", "/ko/project/q-seed", "/ja/project/q-seed"],
     },
   ];
 
