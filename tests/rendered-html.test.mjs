@@ -64,7 +64,7 @@ test("renders localized hub routes with document language, metadata, and languag
       lang: "en",
       title: "Data Engineering Portfolio | DevSmapy",
       text: "computational drug discovery.",
-      personalText: "One research engine.",
+      personalText: "Local equity pipeline built as data engineering.",
       links: ["/", "/ko", "/ja"],
     },
     {
@@ -72,7 +72,8 @@ test("renders localized hub routes with document language, metadata, and languag
       lang: "ko",
       title: "데이터 엔지니어링 포트폴리오 | DevSmapy",
       text: "AI 신약 개발을 위한",
-      personalText: "하나의 연구 엔진.",
+      personalText: "데이터 엔지니어링으로 만든 로컬 시세 파이프라인.",
+      dePhrase: "배치 데이터 운영",
       links: ["/", "/ko", "/ja"],
     },
     {
@@ -80,7 +81,7 @@ test("renders localized hub routes with document language, metadata, and languag
       lang: "ja",
       title: "データエンジニアリング・ポートフォリオ | DevSmapy",
       text: "計算創薬のための",
-      personalText: "ひとつの研究エンジン。",
+      personalText: "データエンジニアリングで構築したローカル時系列パイプライン。",
       links: ["/", "/ko", "/ja"],
     },
   ];
@@ -91,6 +92,7 @@ test("renders localized hub routes with document language, metadata, and languag
     assertTitle(html, item.title);
     assert.ok(html.includes(item.text), item.path);
     assert.ok(html.includes(item.personalText), item.path);
+    if (item.dePhrase) assert.ok(html.includes(item.dePhrase), item.path);
     assertLanguageLinks(html, item.links);
   }
 });

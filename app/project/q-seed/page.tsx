@@ -5,7 +5,7 @@ import { getBundle } from "../../content";
 export const metadata: Metadata = {
   title: "Q-SEED | DevSmapy",
   description:
-    "Personal quant research engine: local DuckDB warehouse, factor analysis, backtests, and portfolio optimization—built for reproducible research, not live trading.",
+    "Side data-engineering project: batch KR/US market-data pipeline (DuckDB, dbt, quality ops)—downstream research apps consume the warehouse only. Not live trading.",
 };
 
 export default function QseedProjectPage() {

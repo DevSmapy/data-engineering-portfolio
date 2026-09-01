@@ -5,7 +5,7 @@ import { getBundle } from "../../../content";
 export const metadata: Metadata = {
   title: "Q-SEED | DevSmapy",
   description:
-    "로컬 DuckDB 웨어하우스, 팩터 분석, 백테스트, 포트폴리오 최적화를 갖춘 개인 퀀트 연구 엔진—재현 가능한 연구를 위해 만들었으며, 실시간 매매용이 아닙니다.",
+    "사이드 데이터 엔지니어링 프로젝트: KR/US 배치 시세 파이프라인(DuckDB, dbt, 품질 운영)—downstream 연구 앱은 웨어하우스만 소비합니다. 실시간 매매용이 아닙니다.",
 };
 
 export default function KoreanQseedProjectPage() {

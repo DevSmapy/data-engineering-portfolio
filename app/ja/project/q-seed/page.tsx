@@ -5,7 +5,7 @@ import { getBundle } from "../../../content";
 export const metadata: Metadata = {
   title: "Q-SEED | DevSmapy",
   description:
-    "ローカルDuckDBウェアハウス、ファクター分析、バックテスト、ポートフォリオ最適化を備えた個人クオンツ研究エンジン—再現可能な研究のためのもので、ライブ取引用ではありません。",
+    "サイドデータエンジニアリングプロジェクト：KR/USバッチ時系列パイプライン（DuckDB、dbt、品質運用）—downstream研究アプリはウェアハウスのみ参照。ライブ取引用ではありません。",
 };
 
 export default function JapaneseQseedProjectPage() {
