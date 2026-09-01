@@ -301,8 +301,13 @@ export const en: LocaleBundle = {
       ["Focus", "Batch data ops · warehouse"],
       ["Domain", "Equities"],
     ],
-    heroFoot:
-      "Universe, hypotheses, and constraints start with me. Cursor helps implement. I review and verify before anything ships.",
+    heroFoot: [
+      "Universe, hypotheses, and constraints—I ",
+      { em: "define them" },
+      ". Cursor helps implement.\nResults ship after ",
+      { em: "I verify" },
+      ".",
+    ],
     footTags: ["BATCH OPS", "DATA QUALITY", "REPRODUCIBILITY"],
     contextLabel: "00 / PROBLEM",
     context:

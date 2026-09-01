@@ -1,5 +1,7 @@
 export type Locale = "en" | "ko" | "ja";
 
+export type HeroFootSegment = string | { em: string };
+
 export type CaseContent = {
   id: "platform" | "backbone" | "qseed";
   path: string;
@@ -16,7 +18,7 @@ export type CaseContent = {
   completed: string;
   pipeline: string[];
   summary: [string, string][];
-  heroFoot: string;
+  heroFoot: string | readonly HeroFootSegment[];
   footTags: string[];
   contextLabel: string;
   context: string;

@@ -287,8 +287,13 @@ export const ja: LocaleBundle = {
       ["重点", "バッチデータ運用 · ウェアハウス"],
       ["領域", "株式"],
     ],
-    heroFoot:
-      "ユニバース、仮説、制約は自分が決めます。Cursorは実装を助け、反映前に自分が検証します。",
+    heroFoot: [
+      "ユニバース·仮説·制約は",
+      { em: "自分が定義し" },
+      "、Cursorは実装を助けます。\n結果は",
+      { em: "自分が検証してから反映" },
+      "します。",
+    ],
     footTags: ["BATCH OPS", "DATA QUALITY", "REPRODUCIBILITY"],
     contextLabel: "00 / 背景",
     context:

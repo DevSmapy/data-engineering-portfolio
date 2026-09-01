@@ -286,13 +286,17 @@ export const ko: LocaleBundle = {
       ["중점", "배치 데이터 운영 · 웨어하우스"],
       ["분야", "주식"],
     ],
-    heroFoot:
-      "유니버스, 가설, 제약은 제가 정합니다. Cursor는 구현을 돕고, 반영 전에 제가 검증합니다.",
+    heroFoot: [
+      "유니버스·가설·제약은 ",
+      { em: "제가 정의하고" },
+      ", Cursor는 구현을 돕습니다.\n결과는 ",
+      { em: "제가 검증한 뒤 반영합니다." },
+    ],
     footTags: ["BATCH OPS", "DATA QUALITY", "REPRODUCIBILITY"],
     contextLabel: "00 / 배경",
     context:
       "교차종목 분석은 요청마다 live API를 치면 재현할 수 없습니다. 배치 웨어하우스가",
-    contextStrong: "정본이어야 합니다.",
+    contextStrong: "단일 기준 데이터여야 합니다.",
     systemLabel: "01 / 시스템",
     systemTitle: "네 개의 계층.\n하나의 파이프라인.",
     systemCopy:
@@ -329,7 +333,7 @@ export const ko: LocaleBundle = {
       "DE 관점의 재현 가능한 데이터 경로: warehouse-only read, 재개 가능한 수집, 품질 게이트.",
     workItems: [
       [
-        "웨어하우스가 정본",
+        "웨어하우스가 단일 기준 데이터",
         "yfinance·FDR은 배치만. downstream은 DuckDB만 읽습니다.",
       ],
       [

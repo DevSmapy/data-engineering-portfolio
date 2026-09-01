@@ -10,6 +10,7 @@ import {
   type CaseContent,
   type Locale,
 } from "./content";
+import type { HeroFootSegment } from "./types";
 
 type NavPage = "home" | "platform" | "backbone" | "qseed";
 
@@ -31,6 +32,28 @@ function Lines({ text }: { text: string }) {
         </span>
       ))}
     </>
+  );
+}
+
+function renderFootText(text: string) {
+  const lines = text.split("\n");
+  if (lines.length === 1) return text;
+  return lines.map((line, i) => (
+    <span key={i}>
+      {i > 0 && <br />}
+      {line}
+    </span>
+  ));
+}
+
+function HeroFootText({ foot }: { foot: string | readonly HeroFootSegment[] }) {
+  if (typeof foot === "string") return renderFootText(foot);
+  return foot.map((part, index) =>
+    typeof part === "string" ? (
+      <span key={index}>{renderFootText(part)}</span>
+    ) : (
+      <strong key={index}>{part.em}</strong>
+    ),
   );
 }
 
@@ -339,7 +362,9 @@ export function CaseStudyPage({
           </aside>
         </div>
         <div className="heroFoot">
-          <p>{c.heroFoot}</p>
+          <p>
+            <HeroFootText foot={c.heroFoot} />
+          </p>
           <div>
             {c.footTags.map((tag) => (
               <span key={tag}>{tag}</span>
