@@ -5,6 +5,8 @@ import {
   PLATFORM_GITHUB,
   PLATFORM_PATH,
   PLATFORM_VIDEO,
+  QSEED_GITHUB,
+  QSEED_PATH,
 } from "../shared";
 
 export const en: LocaleBundle = {
@@ -14,8 +16,10 @@ export const en: LocaleBundle = {
     home: "Home",
     backHome: "Back to home",
     work: "Work",
+    project: "Project",
     platform: "Platform",
     backbone: "Backbone",
+    qseed: "Q-SEED",
   },
   hub: {
     heroEyebrow: "Pharmaceutical R&D · Data & AI Engineering",
@@ -52,6 +56,22 @@ export const en: LocaleBundle = {
           ["Role", "Data Engineer"],
           ["Scale", "100M+ records · 100+ servers"],
           ["Focus", "Batch reliability & data ops"],
+        ],
+      },
+    ],
+    personalLabel: "PERSONAL",
+    personalTitle: "One research engine.",
+    personalProjects: [
+      {
+        href: QSEED_PATH,
+        githubUrl: QSEED_GITHUB,
+        title: "Q-SEED",
+        summary:
+          "Local DuckDB warehouse for Korean and US equities, then factor analysis, backtests, and weight optimization—built to reproduce research, not to trade or broker.",
+        facts: [
+          ["Role", "Personal · data engineer"],
+          ["Loop", "Collect → health → factor → simulate"],
+          ["Stack", "DuckDB · dbt · Python"],
         ],
       },
     ],
@@ -261,5 +281,116 @@ export const en: LocaleBundle = {
     footerTitle: "Explore the project\nin detail.",
     github: "View GitHub repository",
     copyright: "CHEMICAL DATA OPERATIONS · CASE STUDY",
+  },
+  qseed: {
+    id: "qseed",
+    path: QSEED_PATH,
+    githubUrl: QSEED_GITHUB,
+    nav: ["Problem", "System", "Work", "Stack"],
+    heroEyebrow: "Personal project · Quant research engine",
+    heroTitle: "Warehouse first.",
+    heroAccent: "Then the strategy.",
+    heroCopy:
+      "Q-SEED loads market data once, checks it, and only then runs factor analysis, backtests, and portfolio weights. Cross-sectional research does not hit live APIs on every request.",
+    explore: "Explore the system",
+    caseLabel: "PERSONAL PROJECT / 2026",
+    completed: "IN PROGRESS",
+    pipeline: ["LOAD", "HEALTH", "RESEARCH"],
+    summary: [
+      ["Role", "Personal · data engineer"],
+      ["Focus", "Warehouse-first quant research"],
+      ["Domain", "Equities · factor research"],
+    ],
+    heroFoot:
+      "Universe, hypotheses, and constraints start with me. Cursor helps implement. I review and verify before anything ships.",
+    footTags: ["DUCKDB", "REPRODUCIBILITY", "LOCAL RESEARCH"],
+    contextLabel: "00 / PROBLEM",
+    context:
+      "On-demand quote APIs cannot reproduce a cross-sectional study. For factor IC and backtests, the warehouse has to be",
+    contextStrong: "the source of truth.",
+    systemLabel: "01 / THE SYSTEM",
+    systemTitle: "Four layers.\nOne research loop.",
+    systemCopy:
+      "Batch collection, health checks, factor analysis, and simulation share one DuckDB file. Each phase reads what the previous phase wrote.",
+    capabilities: [
+      {
+        index: "01",
+        title: "Collect",
+        text: "FinanceDataReader for universes, yfinance in chunks into DuckDB raw_stocks with Parquet backup. Incremental updates and market-aware gap repair.",
+        tags: ["DuckDB", "Parquet", "cron"],
+      },
+      {
+        index: "02",
+        title: "Health",
+        text: "dbt marts for coverage, freshness, and data quality. Streamlit review UI. Analysis and local API read the warehouse—not live quotes.",
+        tags: ["dbt", "Streamlit"],
+      },
+      {
+        index: "03",
+        title: "Factor",
+        text: "Six built-in price factors. Cross-sectional IC and quintiles stored per factor so prior runs are not wiped on the next experiment.",
+        tags: ["IC", "quintiles"],
+      },
+      {
+        index: "04",
+        title: "Simulate",
+        text: "Long-short backtests with run_id provenance, then selection vs allocation: equal weight, min-volatility, and HRP on the same engine.",
+        tags: ["provenance", "optimize"],
+      },
+    ],
+    workLabel: "02 / WHAT I DID",
+    workTitle: "Make the loop finish,\nthen argue with it.",
+    workCopy:
+      "Engineering choices that keep research reproducible: warehouse-only analysis, resumable ingestion, and runs you can cite.",
+    workItems: [
+      [
+        "Warehouse before signals",
+        "yfinance and FinanceDataReader run only in batch. Factor work, dashboards, and the local API read DuckDB.",
+      ],
+      [
+        "Ops that resume",
+        "Ticker-level last_date incremental loads, market-aware gap repair, and KR/US cron sessions with a shared write lock.",
+      ],
+      [
+        "Runs you can cite",
+        "Factor tables replace one factor at a time. Backtests keep run_id, manifest.json, and provenance metadata.",
+      ],
+      [
+        "Human intent, AI as tool",
+        "I set the universe, hypotheses, constraints, and review bar. Cursor implements from that intent. I verify outputs before merging.",
+      ],
+    ],
+    impactLabel: "03 / IMPACT",
+    impactTitle: "A loop you can\nrerun and trust.",
+    impactCopy:
+      "The point is not a single backtest number on a portfolio page. It is infrastructure that makes factor research inspectable and repeatable on your machine.",
+    impacts: [
+      [
+        "Reproducible path",
+        "The same CLI commands rebuild the warehouse, rerun analysis, and leave artifacts you can diff.",
+      ],
+      [
+        "Quality before signals",
+        "Coverage, freshness, and gap checks run before factor or backtest code assumes the data is clean.",
+      ],
+      [
+        "Clear boundaries",
+        "Not live trading, not broker integration, not a hosted API—local research with GitHub for deeper case studies.",
+      ],
+    ],
+    toolkitLabel: "04 / TOOLKIT",
+    toolkitTitle: "The stack behind\nthe loop.",
+    toolkitCopy: "Python tooling for ingestion, transformation, analysis, and local review.",
+    stack: [
+      ["Language & packaging", "Python 3.11–3.12 · uv · pydantic-settings"],
+      ["Ingestion & storage", "FinanceDataReader · yfinance · DuckDB · Parquet"],
+      ["Transform & review", "dbt-core/dbt-duckdb · Streamlit · Plotly"],
+      ["Analysis", "Pandas · SciPy · quantstats · pyportfolioopt"],
+      ["Quality & deploy", "Ruff · mypy · pre-commit · Docker"],
+    ],
+    footerLabel: "FULL PROJECT",
+    footerTitle: "Explore the engine\non GitHub.",
+    github: "View GitHub repository",
+    copyright: "Q-SEED · PERSONAL PROJECT",
   },
 };

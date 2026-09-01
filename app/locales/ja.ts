@@ -5,6 +5,8 @@ import {
   PLATFORM_GITHUB,
   PLATFORM_PATH,
   PLATFORM_VIDEO,
+  QSEED_GITHUB,
+  QSEED_PATH,
 } from "../shared";
 
 export const ja: LocaleBundle = {
@@ -14,8 +16,10 @@ export const ja: LocaleBundle = {
     home: "ホーム",
     backHome: "ホームへ戻る",
     work: "プロジェクト",
+    project: "個人",
     platform: "プラットフォーム",
     backbone: "バックボーン",
+    qseed: "Q-SEED",
   },
   hub: {
     heroEyebrow: "製薬R&D · データ & AIエンジニアリング",
@@ -52,6 +56,22 @@ export const ja: LocaleBundle = {
           ["役割", "Data Engineer"],
           ["規模", "1億+件 · 100+サーバー"],
           ["重点", "バッチ信頼性・データ運用"],
+        ],
+      },
+    ],
+    personalLabel: "個人プロジェクト",
+    personalTitle: "ひとつの研究エンジン。",
+    personalProjects: [
+      {
+        href: QSEED_PATH,
+        githubUrl: QSEED_GITHUB,
+        title: "Q-SEED",
+        summary:
+          "韓国・米国株の時系列をローカルDuckDBに載せ、ファクター分析・バックテスト・ウェイト最適化まで検証する研究エンジン—再現可能な研究のためのもので、自動売買やブローカー連携ではありません。",
+        facts: [
+          ["役割", "Personal · data engineer"],
+          ["ループ", "取込 → 品質 → ファクター → シミュレーション"],
+          ["スタック", "DuckDB · dbt · Python"],
         ],
       },
     ],
@@ -247,5 +267,116 @@ export const ja: LocaleBundle = {
     footerTitle: "GitHubで詳細を\nご覧ください。",
     github: "GitHubリポジトリを見る",
     copyright: "化合物データ運用 · ケーススタディ",
+  },
+  qseed: {
+    id: "qseed",
+    path: QSEED_PATH,
+    githubUrl: QSEED_GITHUB,
+    nav: ["背景", "システム", "貢献", "スタック"],
+    heroEyebrow: "個人プロジェクト · クオンツ研究エンジン",
+    heroTitle: "ウェアハウスを先に。",
+    heroAccent: "そのあと戦略。",
+    heroCopy:
+      "Q-SEEDは時系列を一度取り込み・検証してから、ファクター分析、バックテスト、ポートフォリオのウェイトを実行します。横断面研究はリクエストごとにライブAPIを叩きません。",
+    explore: "システムを見る",
+    caseLabel: "個人プロジェクト / 2026",
+    completed: "進行中",
+    pipeline: ["取込", "品質", "研究"],
+    summary: [
+      ["役割", "Personal · data engineer"],
+      ["重点", "ウェアハウス優先のクオンツ研究"],
+      ["領域", "株式 · ファクター研究"],
+    ],
+    heroFoot:
+      "ユニバース、仮説、制約は自分が決めます。Cursorは実装を助け、反映前に自分が検証します。",
+    footTags: ["DUCKDB", "再現性", "ローカル研究"],
+    contextLabel: "00 / 背景",
+    context:
+      "オンデマンドの時系列APIでは横断面研究を再現できません。ファクターICとバックテストのために、",
+    contextStrong: "ウェアハウスがsource of truthである必要があります。",
+    systemLabel: "01 / システム",
+    systemTitle: "4つのレイヤー。\n1つの研究ループ。",
+    systemCopy:
+      "バッチ取込、品質確認、ファクター分析、シミュレーションが1つのDuckDBファイルを共有します。各フェーズは前のフェーズが書いたデータを読みます。",
+    capabilities: [
+      {
+        index: "01",
+        title: "取込",
+        text: "FinanceDataReaderでユニバース、yfinanceでチャンク取込→DuckDB raw_stocksとParquetバックアップ。増分更新と市場別ギャップ修復。",
+        tags: ["DuckDB", "Parquet", "cron"],
+      },
+      {
+        index: "02",
+        title: "品質",
+        text: "dbt martでカバレッジ・鮮度・品質。StreamlitレビューUI。分析とローカルAPIはライブ相場ではなくウェアハウスを読みます。",
+        tags: ["dbt", "Streamlit"],
+      },
+      {
+        index: "03",
+        title: "ファクター",
+        text: "内蔵価格ファクター6種。横断面IC・五分位をファクター単位で保存し、次の実験が前の結果を消しません。",
+        tags: ["IC", "五分位"],
+      },
+      {
+        index: "04",
+        title: "シミュレーション",
+        text: "run_id provenance付きロングショートバックテスト、その後選定と配分—同額・最小分散・HRPを同じエンジンで。",
+        tags: ["provenance", "最適化"],
+      },
+    ],
+    workLabel: "02 / 担当したこと",
+    workTitle: "ループを完走し、\n結果と議論する。",
+    workCopy:
+      "研究を再現可能にするエンジニアリング判断：ウェアハウス専用分析、再開可能な取込、引用できる実行。",
+    workItems: [
+      [
+        "シグナルよりウェアハウス",
+        "yfinance・FinanceDataReaderはバッチのみ。ファクター・ダッシュボード・ローカルAPIはDuckDBを読みます。",
+      ],
+      [
+        "再開できる運用",
+        "ティッカー別last_date増分、市場別ギャップ修復、KR/US cronと共有書き込みロック。",
+      ],
+      [
+        "引用できる実行",
+        "ファクターテーブルはファクター単位で差し替え。バックテストはrun_id・manifest.json・provenanceを残します。",
+      ],
+      [
+        "人の意図、AIは道具",
+        "ユニバース・仮説・制約・レビュー基準は自分が決めます。Cursorはその意図どおり実装し、反映前に自分が検証します。",
+      ],
+    ],
+    impactLabel: "03 / 成果",
+    impactTitle: "再実行でき、\n信頼できるループ。",
+    impactCopy:
+      "ポートフォリオページにバックテスト数字を載せることが目的ではありません。自分のマシンでファクター研究を検査・反復できるインフラが目的です。",
+    impacts: [
+      [
+        "再現可能な経路",
+        "同じCLIでウェアハウスを再構築し分析を再実行し、diffできる成果物を残します。",
+      ],
+      [
+        "シグナル前の品質",
+        "ファクター・バックテストがデータがきれいだと仮定する前に、カバレッジ・鮮度・ギャップを確認します。",
+      ],
+      [
+        "明確な境界",
+        "ライブ取引・ブローカー連携・ホスティングAPIではない—ローカル研究であり、詳細ケースはGitHubにあります。",
+      ],
+    ],
+    toolkitLabel: "04 / 技術スタック",
+    toolkitTitle: "ループを支えた\n技術。",
+    toolkitCopy: "取込・変換・分析・ローカルレビューのためのPythonツールです。",
+    stack: [
+      ["言語・パッケージ", "Python 3.11–3.12 · uv · pydantic-settings"],
+      ["取込・保存", "FinanceDataReader · yfinance · DuckDB · Parquet"],
+      ["変換・レビュー", "dbt-core/dbt-duckdb · Streamlit · Plotly"],
+      ["分析", "Pandas · SciPy · quantstats · pyportfolioopt"],
+      ["品質・デプロイ", "Ruff · mypy · pre-commit · Docker"],
+    ],
+    footerLabel: "プロジェクト全体",
+    footerTitle: "GitHubでエンジンを\n詳しく見る。",
+    github: "GitHubリポジトリを見る",
+    copyright: "Q-SEED · 個人プロジェクト",
   },
 };

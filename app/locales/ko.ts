@@ -5,6 +5,8 @@ import {
   PLATFORM_GITHUB,
   PLATFORM_PATH,
   PLATFORM_VIDEO,
+  QSEED_GITHUB,
+  QSEED_PATH,
 } from "../shared";
 
 export const ko: LocaleBundle = {
@@ -14,8 +16,10 @@ export const ko: LocaleBundle = {
     home: "홈",
     backHome: "홈으로",
     work: "프로젝트",
+    project: "개인",
     platform: "플랫폼",
     backbone: "백본",
+    qseed: "Q-SEED",
   },
   hub: {
     heroEyebrow: "제약 R&D · 데이터 & AI 엔지니어링",
@@ -52,6 +56,22 @@ export const ko: LocaleBundle = {
           ["역할", "Data Engineer"],
           ["규모", "1억+ 건 · 100+ 서버"],
           ["중점", "배치 신뢰성 및 데이터 운영"],
+        ],
+      },
+    ],
+    personalLabel: "개인 프로젝트",
+    personalTitle: "하나의 연구 엔진.",
+    personalProjects: [
+      {
+        href: QSEED_PATH,
+        githubUrl: QSEED_GITHUB,
+        title: "Q-SEED",
+        summary:
+          "한국·미국 주식 시세를 로컬 DuckDB에 적재하고, 팩터 분석·백테스트·가중치 최적화까지 검증하는 연구 엔진—재현 가능한 연구를 위해 만들었으며, 자동매매나 브로커 연동은 아닙니다.",
+        facts: [
+          ["역할", "Personal · data engineer"],
+          ["루프", "적재 → 품질 → 팩터 → 시뮬레이션"],
+          ["스택", "DuckDB · dbt · Python"],
         ],
       },
     ],
@@ -246,5 +266,116 @@ export const ko: LocaleBundle = {
     footerTitle: "GitHub에서 더 자세히\n확인해보세요.",
     github: "GitHub 저장소 보기",
     copyright: "화합물 데이터 운영 · 프로젝트 사례",
+  },
+  qseed: {
+    id: "qseed",
+    path: QSEED_PATH,
+    githubUrl: QSEED_GITHUB,
+    nav: ["배경", "시스템", "기여", "스택"],
+    heroEyebrow: "개인 프로젝트 · 퀀트 연구 엔진",
+    heroTitle: "웨어하우스 먼저.",
+    heroAccent: "그다음 전략.",
+    heroCopy:
+      "Q-SEED는 시세를 한 번 적재·검증한 뒤 팩터 분석, 백테스트, 포트폴리오 가중치를 실행합니다. 단면 연구는 요청마다 실시간 시세 API를 치지 않습니다.",
+    explore: "시스템 살펴보기",
+    caseLabel: "개인 프로젝트 / 2026",
+    completed: "진행 중",
+    pipeline: ["적재", "품질", "연구"],
+    summary: [
+      ["역할", "Personal · data engineer"],
+      ["중점", "웨어하우스 우선 퀀트 연구"],
+      ["분야", "주식 · 팩터 연구"],
+    ],
+    heroFoot:
+      "유니버스, 가설, 제약은 제가 정합니다. Cursor는 구현을 돕고, 반영 전에 제가 검증합니다.",
+    footTags: ["DUCKDB", "재현성", "로컬 연구"],
+    contextLabel: "00 / 배경",
+    context:
+      "온디맨드 시세 API로는 단면 연구를 재현할 수 없습니다. 팩터 IC와 백테스트를 위해서는",
+    contextStrong: "웨어하우스가 source of truth여야 합니다.",
+    systemLabel: "01 / 시스템",
+    systemTitle: "네 개의 계층.\n하나의 연구 루프.",
+    systemCopy:
+      "배치 수집, 품질 확인, 팩터 분석, 시뮬레이션이 하나의 DuckDB 파일을 공유합니다. 각 단계는 이전 단계가 쓴 데이터를 읽습니다.",
+    capabilities: [
+      {
+        index: "01",
+        title: "적재",
+        text: "FinanceDataReader로 유니버스, yfinance 청크 수집 후 DuckDB raw_stocks와 Parquet 백업. 증분 갱신과 시장별 공백 복구.",
+        tags: ["DuckDB", "Parquet", "cron"],
+      },
+      {
+        index: "02",
+        title: "품질",
+        text: "dbt mart로 커버리지·신선도·품질 확인. Streamlit 리뷰 UI. 분석과 로컬 API는 실시간 시세가 아닌 웨어하우스를 읽습니다.",
+        tags: ["dbt", "Streamlit"],
+      },
+      {
+        index: "03",
+        title: "팩터",
+        text: "내장 가격 팩터 6종. 단면 IC·분위수를 팩터별로 저장해 다음 실험이 이전 결과를 지우지 않습니다.",
+        tags: ["IC", "분위수"],
+      },
+      {
+        index: "04",
+        title: "시뮬레이션",
+        text: "run_id provenance가 있는 롱숏 백테스트, 이후 선정과 배분—동일가중·최소분산·HRP를 같은 엔진으로.",
+        tags: ["provenance", "최적화"],
+      },
+    ],
+    workLabel: "02 / 내가 한 일",
+    workTitle: "루프를 끝까지 돌리고,\n그 결과와 논쟁하기.",
+    workCopy:
+      "연구를 재현 가능하게 만드는 엔지니어링 선택: 웨어하우스 전용 분석, 재개 가능한 수집, 인용 가능한 실행.",
+    workItems: [
+      [
+        "시그널보다 웨어하우스",
+        "yfinance·FinanceDataReader는 배치에만 사용. 팩터·대시보드·로컬 API는 DuckDB를 읽습니다.",
+      ],
+      [
+        "재개 가능한 운영",
+        "티커별 last_date 증분, 시장별 공백 복구, KR/US cron과 공유 쓰기 락.",
+      ],
+      [
+        "인용 가능한 실행",
+        "팩터 테이블은 팩터 단위 교체. 백테스트는 run_id·manifest.json·provenance 메타데이터를 남깁니다.",
+      ],
+      [
+        "사람의 의도, AI는 도구",
+        "유니버스·가설·제약·리뷰 기준은 제가 정합니다. Cursor는 그 의도대로 구현하고, 반영 전에 제가 검증합니다.",
+      ],
+    ],
+    impactLabel: "03 / 성과",
+    impactTitle: "다시 돌리고\n신뢰할 수 있는 루프.",
+    impactCopy:
+      "포트폴리오 페이지에 백테스트 숫자 하나를 올리는 것이 목적이 아닙니다. 내 머신에서 팩터 연구를 검사하고 반복할 수 있는 인프라가 목적입니다.",
+    impacts: [
+      [
+        "재현 가능한 경로",
+        "같은 CLI로 웨어하우스를 재구축하고 분석을 다시 실행하며 diff할 산출물을 남깁니다.",
+      ],
+      [
+        "시그널 전 품질",
+        "팩터·백테스트 코드가 데이터가 깨끗하다고 가정하기 전에 커버리지·신선도·공백을 확인합니다.",
+      ],
+      [
+        "명확한 경계",
+        "실시간 매매·브로커 연동·호스티드 API가 아닌—로컬 연구이며, 상세 케이스는 GitHub에 있습니다.",
+      ],
+    ],
+    toolkitLabel: "04 / 기술 스택",
+    toolkitTitle: "루프를 지탱한\n기술.",
+    toolkitCopy: "수집·변환·분석·로컬 리뷰를 위한 Python 도구입니다.",
+    stack: [
+      ["언어·패키징", "Python 3.11–3.12 · uv · pydantic-settings"],
+      ["수집·저장", "FinanceDataReader · yfinance · DuckDB · Parquet"],
+      ["변환·리뷰", "dbt-core/dbt-duckdb · Streamlit · Plotly"],
+      ["분석", "Pandas · SciPy · quantstats · pyportfolioopt"],
+      ["품질·배포", "Ruff · mypy · pre-commit · Docker"],
+    ],
+    footerLabel: "전체 프로젝트",
+    footerTitle: "GitHub에서 엔진\n자세히 보기.",
+    github: "GitHub 저장소 보기",
+    copyright: "Q-SEED · 개인 프로젝트",
   },
 };
