@@ -5,6 +5,8 @@ import {
   PLATFORM_GITHUB,
   PLATFORM_PATH,
   PLATFORM_VIDEO,
+  QSEED_GITHUB,
+  QSEED_PATH,
 } from "../shared";
 
 export const ja: LocaleBundle = {
@@ -14,8 +16,10 @@ export const ja: LocaleBundle = {
     home: "ホーム",
     backHome: "ホームへ戻る",
     work: "プロジェクト",
+    project: "サイド",
     platform: "プラットフォーム",
     backbone: "バックボーン",
+    qseed: "Q-SEED",
   },
   hub: {
     heroEyebrow: "製薬R&D · データ & AIエンジニアリング",
@@ -52,6 +56,22 @@ export const ja: LocaleBundle = {
           ["役割", "Data Engineer"],
           ["規模", "1億+件 · 100+サーバー"],
           ["重点", "バッチ信頼性・データ運用"],
+        ],
+      },
+    ],
+    personalLabel: "サイドプロジェクト",
+    personalTitle: "データエンジニアリングで構築したローカル時系列パイプライン。",
+    personalProjects: [
+      {
+        href: QSEED_PATH,
+        githubUrl: QSEED_GITHUB,
+        title: "Q-SEED",
+        summary:
+          "KR/US株をDuckDBへバッチ取込し、dbtで品質確認。CLI・ローカルAPIはウェアハウスのみ参照。ファクター・バックテストはdownstreamの例。",
+        facts: [
+          ["役割", "Data Engineer"],
+          ["重点", "バッチデータ運用 · ウェアハウス"],
+          ["ループ", "取込 → 変換 → 提供"],
         ],
       },
     ],
@@ -247,5 +267,122 @@ export const ja: LocaleBundle = {
     footerTitle: "GitHubで詳細を\nご覧ください。",
     github: "GitHubリポジトリを見る",
     copyright: "化合物データ運用 · ケーススタディ",
+  },
+  qseed: {
+    id: "qseed",
+    path: QSEED_PATH,
+    githubUrl: QSEED_GITHUB,
+    nav: ["背景", "システム", "貢献", "スタック"],
+    heroEyebrow: "サイドプロジェクト · データエンジニアリング",
+    heroTitle: "ウェアハウスを先に。",
+    heroAccent: "そのあと全部ここから読む。",
+    heroCopy:
+      "データエンジニアリングの観点でKR/US時系列のバッチパイプラインを設計しました。downstream研究アプリはlive APIではなくウェアハウスのみを消費します。",
+    explore: "システムを見る",
+    caseLabel: "サイドプロジェクト / 2026",
+    completed: "進行中",
+    pipeline: ["取込", "品質", "提供"],
+    summary: [
+      ["役割", "Data Engineer"],
+      ["重点", "バッチデータ運用 · ウェアハウス"],
+      ["領域", "株式"],
+    ],
+    heroFoot: [
+      "ユニバース·仮説·制約は",
+      { em: "自分が定義し" },
+      "、Cursorは実装を助けます。\n結果は",
+      { em: "自分が検証してから反映" },
+      "します。",
+    ],
+    footTags: ["BATCH OPS", "DATA QUALITY", "REPRODUCIBILITY"],
+    contextLabel: "00 / 背景",
+    context:
+      "横断面分析はリクエストごとにlive APIを叩くと再現できません。バッチウェアハウスが",
+    contextStrong: "正本である必要があります。",
+    systemLabel: "01 / システム",
+    systemTitle: "4つのレイヤー。\n1つのパイプライン。",
+    systemCopy:
+      "取込、変換·品質、提供、downstream消費が1つのDuckDBファイルを共有します。",
+    capabilities: [
+      {
+        index: "01",
+        title: "取込",
+        text: "FinanceDataReaderユニバース、yfinanceチャンク → DuckDB·Parquet。ティッカー別増分·市場別ギャップ修復。",
+        tags: ["DuckDB", "Parquet", "cron"],
+      },
+      {
+        index: "02",
+        title: "品質",
+        text: "dbt martでcoverage·鮮度·品質。Streamlitレビュー。分析·APIはウェアハウスのみ参照。",
+        tags: ["dbt", "Streamlit"],
+      },
+      {
+        index: "03",
+        title: "Downstream",
+        text: "ファクター·ICなど研究アプリはウェアハウスのみ参照。ファクター別テーブル差し替えで実験履歴を保持。",
+        tags: ["CLI", "consumer"],
+      },
+      {
+        index: "04",
+        title: "実行履歴",
+        text: "run_id·manifest·provenanceで実行を追跡。quant stackは例示consumer。",
+        tags: ["provenance", "Parquet"],
+      },
+    ],
+    workLabel: "02 / 担当したこと",
+    workTitle: "パイプラインを最後まで\n回す運用。",
+    workCopy:
+      "DE視点の再現可能なデータ経路：warehouse-only read、再開可能な取込、品質ゲート。",
+    workItems: [
+      [
+        "ウェアハウスが正本",
+        "yfinance·FDRはバッチのみ。downstreamはDuckDBのみ参照。",
+      ],
+      [
+        "再開できる取込",
+        "last_date増分、ギャップ修復、KR/US cron、書き込みロック。",
+      ],
+      [
+        "消費前の品質",
+        "coverage·freshness·gap確認後にdownstreamがデータを前提にします。",
+      ],
+      [
+        "意図は人、実装はAI",
+        "ユニバース·制約·レビューは自分が決め、Cursorが実装、自分が検証。",
+      ],
+    ],
+    impactLabel: "03 / 成果",
+    impactTitle: "再実行でき、\n信頼できるパイプライン。",
+    impactCopy:
+      "再構築可能なバッチパイプライン、downstream実行前の品質確認、明確な製品境界が目標です。",
+    impacts: [
+      [
+        "再構築可能",
+        "同じCLIでwarehouse再取込·成果物diff。",
+      ],
+      [
+        "品質優先",
+        "downstream実行前にデータ状態を確認。",
+      ],
+      [
+        "明確な範囲",
+        "自動売買·ブローカー·ホスティングAPIではない。",
+      ],
+    ],
+    toolkitLabel: "04 / 技術スタック",
+    toolkitTitle: "パイプラインを支えた\n技術。",
+    toolkitCopy:
+      "取込·変換·運用のPythonツール。分析行はdownstream研究アプリを指します。",
+    stack: [
+      ["言語・パッケージ", "Python 3.11–3.12 · uv · pydantic-settings"],
+      ["取込・保存", "FinanceDataReader · yfinance · DuckDB · Parquet"],
+      ["変換・レビュー", "dbt-core/dbt-duckdb · Streamlit · Plotly"],
+      ["分析", "Pandas · SciPy · quantstats · pyportfolioopt"],
+      ["品質・デプロイ", "Ruff · mypy · pre-commit · Docker"],
+    ],
+    footerLabel: "プロジェクト全体",
+    footerTitle: "GitHubでパイプラインを\n詳しく見る。",
+    github: "GitHubリポジトリを見る",
+    copyright: "Q-SEED · サイドプロジェクト",
   },
 };

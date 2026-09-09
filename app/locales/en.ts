@@ -5,6 +5,8 @@ import {
   PLATFORM_GITHUB,
   PLATFORM_PATH,
   PLATFORM_VIDEO,
+  QSEED_GITHUB,
+  QSEED_PATH,
 } from "../shared";
 
 export const en: LocaleBundle = {
@@ -14,8 +16,10 @@ export const en: LocaleBundle = {
     home: "Home",
     backHome: "Back to home",
     work: "Work",
+    project: "Side",
     platform: "Platform",
     backbone: "Backbone",
+    qseed: "Q-SEED",
   },
   hub: {
     heroEyebrow: "Pharmaceutical R&D · Data & AI Engineering",
@@ -52,6 +56,22 @@ export const en: LocaleBundle = {
           ["Role", "Data Engineer"],
           ["Scale", "100M+ records · 100+ servers"],
           ["Focus", "Batch reliability & data ops"],
+        ],
+      },
+    ],
+    personalLabel: "SIDE PROJECT",
+    personalTitle: "Local equity pipeline built as data engineering.",
+    personalProjects: [
+      {
+        href: QSEED_PATH,
+        githubUrl: QSEED_GITHUB,
+        title: "Q-SEED",
+        summary:
+          "Batch KR/US quotes into DuckDB, validate with dbt, serve CLI/local API from the warehouse only. Factor/backtest apps are downstream consumers.",
+        facts: [
+          ["Role", "Data Engineer"],
+          ["Focus", "Batch data ops · warehouse"],
+          ["Loop", "Ingest → transform → serve"],
         ],
       },
     ],
@@ -261,5 +281,122 @@ export const en: LocaleBundle = {
     footerTitle: "Explore the project\nin detail.",
     github: "View GitHub repository",
     copyright: "CHEMICAL DATA OPERATIONS · CASE STUDY",
+  },
+  qseed: {
+    id: "qseed",
+    path: QSEED_PATH,
+    githubUrl: QSEED_GITHUB,
+    nav: ["Problem", "System", "Work", "Stack"],
+    heroEyebrow: "Side project · Data engineering",
+    heroTitle: "Warehouse first.",
+    heroAccent: "Then everything reads it.",
+    heroCopy:
+      "Designed as a data-engineering case: batch market-data pipeline for KR/US equities. Research apps consume the warehouse only—never live APIs per request.",
+    explore: "Explore the system",
+    caseLabel: "SIDE PROJECT / 2026",
+    completed: "IN PROGRESS",
+    pipeline: ["INGEST", "QUALITY", "SERVE"],
+    summary: [
+      ["Role", "Data Engineer"],
+      ["Focus", "Batch data ops · warehouse"],
+      ["Domain", "Equities"],
+    ],
+    heroFoot: [
+      "Universe, hypotheses, and constraints—I ",
+      { em: "define them" },
+      ". Cursor helps implement.\nResults ship after ",
+      { em: "I verify" },
+      ".",
+    ],
+    footTags: ["BATCH OPS", "DATA QUALITY", "REPRODUCIBILITY"],
+    contextLabel: "00 / PROBLEM",
+    context:
+      "Cross-sectional workloads cannot be reproduced if every request hits a live API. The batch warehouse must be",
+    contextStrong: "the source of truth.",
+    systemLabel: "01 / THE SYSTEM",
+    systemTitle: "Four layers.\nOne pipeline.",
+    systemCopy:
+      "Ingest, transform/quality, serve, and downstream consumers share one DuckDB file.",
+    capabilities: [
+      {
+        index: "01",
+        title: "Ingest",
+        text: "FDR universes, yfinance chunks → DuckDB·Parquet. Incremental last_date and gap repair.",
+        tags: ["DuckDB", "Parquet", "cron"],
+      },
+      {
+        index: "02",
+        title: "Quality",
+        text: "dbt marts for coverage, freshness, data quality. Streamlit review. Reads warehouse only.",
+        tags: ["dbt", "Streamlit"],
+      },
+      {
+        index: "03",
+        title: "Consumers",
+        text: "Factor/IC apps read warehouse only. Per-factor table replace preserves run history.",
+        tags: ["CLI", "consumer"],
+      },
+      {
+        index: "04",
+        title: "Provenance",
+        text: "run_id, manifest, metadata for runs. Quant stack = example downstream.",
+        tags: ["provenance", "Parquet"],
+      },
+    ],
+    workLabel: "02 / WHAT I DID",
+    workTitle: "Ops that make\nthe pipeline finish.",
+    workCopy:
+      "DE choices for a reproducible path: warehouse-only reads, resumable ingest, quality gates.",
+    workItems: [
+      [
+        "Warehouse as SoT",
+        "yfinance/FDR in batch only. Downstream reads DuckDB.",
+      ],
+      [
+        "Ops that resume",
+        "last_date incremental, gap repair, KR/US cron, write lock.",
+      ],
+      [
+        "Quality before consume",
+        "Coverage/freshness/gap before downstream assumes clean data.",
+      ],
+      [
+        "Human intent, AI as tool",
+        "I set universe, constraints, review bar; Cursor implements; I verify.",
+      ],
+    ],
+    impactLabel: "03 / IMPACT",
+    impactTitle: "A pipeline you can\nrerun and trust.",
+    impactCopy:
+      "Rebuildable batch pipeline, quality checks before downstream runs, and a clear product boundary—not a trading pitch.",
+    impacts: [
+      [
+        "Rebuildable path",
+        "Same CLI rebuilds warehouse; artifacts you can diff.",
+      ],
+      [
+        "Quality first",
+        "Check data state before downstream runs.",
+      ],
+      [
+        "Clear boundary",
+        "Not live trading, broker, or hosted API.",
+      ],
+    ],
+    toolkitLabel: "04 / TOOLKIT",
+    toolkitTitle: "The stack behind\nthe pipeline.",
+    toolkitCopy:
+      "Python tooling for ingestion, transformation, and ops; the analysis row points at downstream research apps.",
+    stack: [
+      ["Language & packaging", "Python 3.11–3.12 · uv · pydantic-settings"],
+      ["Ingestion & storage", "FinanceDataReader · yfinance · DuckDB · Parquet"],
+      ["Transform & review", "dbt-core/dbt-duckdb · Streamlit · Plotly"],
+      ["Analysis", "Pandas · SciPy · quantstats · pyportfolioopt"],
+      ["Quality & deploy", "Ruff · mypy · pre-commit · Docker"],
+    ],
+    footerLabel: "FULL PROJECT",
+    footerTitle: "Explore the pipeline\non GitHub.",
+    github: "View GitHub repository",
+    copyright: "Q-SEED · SIDE PROJECT",
   },
 };

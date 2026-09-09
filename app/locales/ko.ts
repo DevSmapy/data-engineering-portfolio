@@ -5,6 +5,8 @@ import {
   PLATFORM_GITHUB,
   PLATFORM_PATH,
   PLATFORM_VIDEO,
+  QSEED_GITHUB,
+  QSEED_PATH,
 } from "../shared";
 
 export const ko: LocaleBundle = {
@@ -14,8 +16,10 @@ export const ko: LocaleBundle = {
     home: "홈",
     backHome: "홈으로",
     work: "프로젝트",
+    project: "사이드",
     platform: "플랫폼",
     backbone: "백본",
+    qseed: "Q-SEED",
   },
   hub: {
     heroEyebrow: "제약 R&D · 데이터 & AI 엔지니어링",
@@ -52,6 +56,22 @@ export const ko: LocaleBundle = {
           ["역할", "Data Engineer"],
           ["규모", "1억+ 건 · 100+ 서버"],
           ["중점", "배치 신뢰성 및 데이터 운영"],
+        ],
+      },
+    ],
+    personalLabel: "사이드 프로젝트",
+    personalTitle: "데이터 엔지니어링으로 만든 로컬 시세 파이프라인.",
+    personalProjects: [
+      {
+        href: QSEED_PATH,
+        githubUrl: QSEED_GITHUB,
+        title: "Q-SEED",
+        summary:
+          "KR/US 주식 시세를 DuckDB에 배치 적재하고 dbt로 품질을 확인합니다. CLI·로컬 API는 웨어하우스만 읽습니다. 팩터·백테스트는 downstream 예시입니다.",
+        facts: [
+          ["역할", "Data Engineer"],
+          ["중점", "배치 데이터 운영 · 웨어하우스"],
+          ["루프", "적재 → 변환 → 제공"],
         ],
       },
     ],
@@ -246,5 +266,121 @@ export const ko: LocaleBundle = {
     footerTitle: "GitHub에서 더 자세히\n확인해보세요.",
     github: "GitHub 저장소 보기",
     copyright: "화합물 데이터 운영 · 프로젝트 사례",
+  },
+  qseed: {
+    id: "qseed",
+    path: QSEED_PATH,
+    githubUrl: QSEED_GITHUB,
+    nav: ["배경", "시스템", "기여", "스택"],
+    heroEyebrow: "사이드 프로젝트 · 데이터 엔지니어링",
+    heroTitle: "웨어하우스 먼저.",
+    heroAccent: "그다음 전부 여기서 읽는다.",
+    heroCopy:
+      "데이터 엔지니어링 관점에서 KR/US 시세 배치 파이프라인을 설계했습니다. downstream 연구 앱은 live API가 아니라 웨어하우스만 소비합니다.",
+    explore: "시스템 살펴보기",
+    caseLabel: "사이드 프로젝트 / 2026",
+    completed: "진행 중",
+    pipeline: ["적재", "품질", "제공"],
+    summary: [
+      ["역할", "Data Engineer"],
+      ["중점", "배치 데이터 운영 · 웨어하우스"],
+      ["분야", "주식"],
+    ],
+    heroFoot: [
+      "유니버스·가설·제약은 ",
+      { em: "제가 정의하고" },
+      ", Cursor는 구현을 돕습니다.\n결과는 ",
+      { em: "제가 검증한 뒤 반영합니다." },
+    ],
+    footTags: ["BATCH OPS", "DATA QUALITY", "REPRODUCIBILITY"],
+    contextLabel: "00 / 배경",
+    context:
+      "교차종목 분석은 요청마다 live API를 치면 재현할 수 없습니다. 배치 웨어하우스가",
+    contextStrong: "단일 기준 데이터여야 합니다.",
+    systemLabel: "01 / 시스템",
+    systemTitle: "네 개의 계층.\n하나의 파이프라인.",
+    systemCopy:
+      "적재, 변환·품질, 제공, downstream 소비가 하나의 DuckDB 파일을 공유합니다.",
+    capabilities: [
+      {
+        index: "01",
+        title: "적재",
+        text: "FinanceDataReader 유니버스, yfinance 청크 → DuckDB·Parquet. 티커별 증분·시장별 공백 복구.",
+        tags: ["DuckDB", "Parquet", "cron"],
+      },
+      {
+        index: "02",
+        title: "품질",
+        text: "dbt mart로 coverage·freshness·품질. Streamlit 리뷰. 분석·API는 웨어하우스만 읽음.",
+        tags: ["dbt", "Streamlit"],
+      },
+      {
+        index: "03",
+        title: "Downstream",
+        text: "팩터·IC 등 연구 앱이 웨어하우스에서만 읽음. 팩터별 테이블 교체로 실험 이력 보존.",
+        tags: ["CLI", "consumer"],
+      },
+      {
+        index: "04",
+        title: "실행 이력",
+        text: "run_id·manifest·provenance로 실행을 추적. quant stack은 예시 consumer.",
+        tags: ["provenance", "Parquet"],
+      },
+    ],
+    workLabel: "02 / 내가 한 일",
+    workTitle: "파이프라인이 끝까지\n돌게 만드는 운영.",
+    workCopy:
+      "DE 관점의 재현 가능한 데이터 경로: warehouse-only read, 재개 가능한 수집, 품질 게이트.",
+    workItems: [
+      [
+        "웨어하우스가 단일 기준 데이터",
+        "yfinance·FDR은 배치만. downstream은 DuckDB만 읽습니다.",
+      ],
+      [
+        "재개 가능한 수집",
+        "last_date 증분, 공백 복구, KR/US cron, 쓰기 락.",
+      ],
+      [
+        "품질 후 소비",
+        "coverage·freshness·gap 확인 후 downstream이 데이터를 가정합니다.",
+      ],
+      [
+        "의도는 사람, 구현은 AI",
+        "유니버스·제약·리뷰는 제가 정하고 Cursor가 구현, 제가 검증합니다.",
+      ],
+    ],
+    impactLabel: "03 / 성과",
+    impactTitle: "다시 돌리고\n신뢰할 수 있는 파이프라인.",
+    impactCopy:
+      "재구축 가능한 배치 파이프라인, downstream 실행 전 품질 확인, 명확한 제품 경계가 목표입니다.",
+    impacts: [
+      [
+        "재구축 가능",
+        "같은 CLI로 warehouse 재적재·산출물 diff.",
+      ],
+      [
+        "품질 우선",
+        "downstream 실행 전에 데이터 상태를 확인.",
+      ],
+      [
+        "명확한 범위",
+        "자동매매·브로커·호스팅 API 아님.",
+      ],
+    ],
+    toolkitLabel: "04 / 기술 스택",
+    toolkitTitle: "파이프라인을 지탱한\n기술.",
+    toolkitCopy:
+      "수집·변환·운영을 위한 Python 도구이며, 분석 행은 downstream 연구 앱을 가리킵니다.",
+    stack: [
+      ["언어·패키징", "Python 3.11–3.12 · uv · pydantic-settings"],
+      ["수집·저장", "FinanceDataReader · yfinance · DuckDB · Parquet"],
+      ["변환·리뷰", "dbt-core/dbt-duckdb · Streamlit · Plotly"],
+      ["분석", "Pandas · SciPy · quantstats · pyportfolioopt"],
+      ["품질·배포", "Ruff · mypy · pre-commit · Docker"],
+    ],
+    footerLabel: "전체 프로젝트",
+    footerTitle: "GitHub에서 파이프라인\n자세히 보기.",
+    github: "GitHub 저장소 보기",
+    copyright: "Q-SEED · 사이드 프로젝트",
   },
 };

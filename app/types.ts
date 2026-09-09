@@ -1,7 +1,9 @@
 export type Locale = "en" | "ko" | "ja";
 
+export type HeroFootSegment = string | { em: string };
+
 export type CaseContent = {
-  id: "platform" | "backbone";
+  id: "platform" | "backbone" | "qseed";
   path: string;
   githubUrl: string;
   videoUrl?: string;
@@ -16,7 +18,7 @@ export type CaseContent = {
   completed: string;
   pipeline: string[];
   summary: [string, string][];
-  heroFoot: string;
+  heroFoot: string | readonly HeroFootSegment[];
   footTags: string[];
   contextLabel: string;
   context: string;
@@ -70,6 +72,15 @@ export type HubContent = {
     summary: string;
     facts: [string, string][];
   }[];
+  personalLabel: string;
+  personalTitle: string;
+  personalProjects: {
+    href: string;
+    githubUrl: string;
+    title: string;
+    summary: string;
+    facts: [string, string][];
+  }[];
   copyright: string;
 };
 
@@ -79,13 +90,16 @@ export type UiCopy = {
   home: string;
   backHome: string;
   work: string;
+  project: string;
   platform: string;
   backbone: string;
+  qseed: string;
 };
 
 export type LocaleBundle = {
   hub: HubContent;
   platform: CaseContent;
   backbone: CaseContent;
+  qseed: CaseContent;
   ui: UiCopy;
 };
